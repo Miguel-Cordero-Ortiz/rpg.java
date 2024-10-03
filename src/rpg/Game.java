@@ -1,44 +1,71 @@
-/**
- * Clase que representa el ciclo del juego, gestionando las interacciones entre el jugador y el enemigo.
- */
-package rpg;
-
-import rpg.entities.Enemy;
 import rpg.entities.Player;
-
+import rpg.entities.enemies.Enemy;
+import rpg.entities.enemies.dragons.BabyDragon;
+import rpg.entities.enemies.goblins.RookieGoblin;
+import rpg.entities.enemies.skeletons.WeakSkeleton;
+import rpg.entities.enemies.slimes.BasicSlime;
+import rpg.entities.enemies.zombies.RookieZombie;
+import rpg.utils.Randomize;
 import javax.swing.*;
-import java.util.Scanner;
 
+/**
+ * La clase Game gestiona el flujo principal del juego.
+ * Se encarga de inicializar al jugador y seleccionar un enemigo aleatoriamente,
+ * mostrar las estadísticas iniciales de ambos personajes y ejecutar el ciclo de combate.
+ */
 public class Game {
-    private Player player;  // El jugador del juego.
-    private Enemy enemy;    // El enemigo del juego.
+
+    private Player player;  // El jugador controlado por el usuario.
+    private Enemy enemy;    // El enemigo generado aleatoriamente.
 
     /**
-     * Constructor que inicializa al jugador y al enemigo.
+     * Método principal que inicia el juego.
+     * @param args Argumentos de la línea de comandos (no utilizados).
      */
-    public Game() {
-        player = new Player("Quijote");
-        enemy = new Enemy("Molino de viento");
+    public static void main(String[] args) {
+        Game game = new Game();
+        game.startGame();
     }
 
     /**
-     * Metodo que inicia el ciclo del juego, alternando turnos entre el jugador y el enemigo.
+     * Constructor de la clase Game.
+     * Inicializa al jugador con el nombre predeterminado "Jugador" y selecciona aleatoriamente
+     * un enemigo de tipo RookieGoblin, BasicSlime, WeakSkeleton, BabyDragon o RookieZombie.
+     */
+    public Game() {
+        this.player = new Player("Jugador");
+        int enemyType = Randomize.getRandomInt(1, 5);
+        this.enemy = switch (enemyType) {
+            case 1 -> new RookieGoblin();
+            case 2 -> new BasicSlime();
+            case 3 -> new WeakSkeleton();
+            case 4 -> new BabyDragon();
+            case 5 -> new RookieZombie();
+            default -> throw new IllegalStateException("Unexpected value: " + enemyType);
+        };
+    }
+
+    /**
+     * Inicia el combate entre el jugador y el enemigo, mostrando las estadísticas iniciales,
+     * realizando los ataques de ambos hasta que uno de ellos sea derrotado.
      */
     public void startGame() {
-        Scanner scanner = new Scanner(System.in);
-        while (player.getHP() > 0 && enemy.getHP() > 0) {
-            player.attack(enemy);
-            if (enemy.getHP() > 0) {
-                enemy.attack(player);
+        // Mostrar estadísticas iniciales
+        JOptionPane.showMessageDialog(null, player.getStatsString() + "\n\n" + enemy.getStatsString());
+
+        // Ciclo del juego mientras ambos personajes estén vivos
+        while (player.isAlive() && enemy.isAlive()) {
+            player.attack(enemy);  // El jugador ataca primero
+            if (enemy.isAlive()) {
+                enemy.attack(player);  // El enemigo ataca si sigue vivo
             }
-            JOptionPane.showMessageDialog(null, "HP del jugador: " + player.getHP() + "\nHP del enemigo: " + enemy.getHP());
         }
 
-        if (player.getHP() <= 0) {
-            JOptionPane.showMessageDialog(null, "Has sido derrotado.");
+        // Mostrar el resultado final del combate
+        if (player.isAlive()) {
+            JOptionPane.showMessageDialog(null, player.getName() + " wins!");
         } else {
-            JOptionPane.showMessageDialog(null, "Has derrotado al enemigo");
+            JOptionPane.showMessageDialog(null, enemy.getName() + " wins!");
         }
-        scanner.close();
     }
 }
