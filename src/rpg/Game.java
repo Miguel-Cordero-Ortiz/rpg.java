@@ -67,5 +67,6 @@ public class Game {
         } else {
             JOptionPane.showMessageDialog(null, enemy.getName() + " wins!");
         }
+
     }
 }
