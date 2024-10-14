@@ -1,101 +1,69 @@
-package rpg.items;
+package rpg.inventory;
 
-import rpg.items.armors.Armor;
-import rpg.items.armors.armor.WoodArmor;
-import rpg.items.miscs.Misc;
-import rpg.items.miscs.WolfPelt;
-
+import rpg.items.Item;
+import javax.swing.JOptionPane;
 import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * La clase Inventory representa el inventario del jugador,
+ * permitiendo añadir, eliminar y gestionar ítems.
+ */
 public class Inventory {
+    private List<Item> items; // Lista de ítems en el inventario
 
-    private ArrayList<Item> items;
-    private int capacity;
-
-    public Inventory(int capacity) {
-        this.capacity = capacity;
+    /**
+     * Constructor de la clase Inventory.
+     * Inicializa la lista de ítems.
+     */
+    public Inventory() {
         items = new ArrayList<>();
     }
 
+    /**
+     * Añade un ítem al inventario.
+     *
+     * @param item El ítem a añadir.
+     */
     public void addItem(Item item) {
-        if (items.size() < capacity) {
-            items.add(item);
-        } else {
-            System.out.println("Inventory is full");
-        }
+        items.add(item);
+        JOptionPane.showMessageDialog(null, item.getName() + " ha sido añadido al inventario.");
     }
 
+    /**
+     * Elimina un ítem del inventario.
+     *
+     * @param item El ítem a eliminar.
+     */
     public void removeItem(Item item) {
-        items.remove(item);
-    }
-
-    public Item getItem(int index) {
-        return items.get(index);
-    }
-
-    public void getItemCount() {
-        items.size();
-    }
-
-    public boolean isFull() {
-        return items.size() == capacity;
-    }
-
-    public boolean isEmpty() {
-        return items.isEmpty();
-    }
-
-    public void clear() {
-        items.clear();
-    }
-
-    public void increaseCapacity(int amount) {
-        capacity += amount;
-        items.ensureCapacity(capacity);
-    }
-
-    public ArrayList<Armor> getArmors() {
-
-        ArrayList<Armor> armors = new ArrayList<>();
-        for (Item item : items) {
-            if (item instanceof Armor) {
-                armors.add((Armor) item);
-            }
+        if (items.remove(item)) {
+            JOptionPane.showMessageDialog(null, item.getName() + " ha sido eliminado del inventario.");
+        } else {
+            JOptionPane.showMessageDialog(null, "El ítem " + item.getName() + " no se encuentra en el inventario.");
         }
-        return armors;
     }
 
-    public ArrayList<Misc> getMiscs() {
-
-        ArrayList<Misc> miscs = new ArrayList<>();
-        for (Item item : items) {
-            if (item instanceof Misc) {
-                miscs.add((Misc) item);
-            }
-        }
-        return miscs;
+    /**
+     * Devuelve la lista de ítems en el inventario.
+     *
+     * @return Lista de ítems.
+     */
+    public List<Item> getItems() {
+        return items;
     }
-    public class Main {
 
-        public static void main(String[] args) {
-
-            Inventory inventory = new Inventory(10);
-
-            Armor armor = new WoodArmor();
-            inventory.addItem(armor);
-
-            Misc misc = new WolfPelt();
-            inventory.addItem(misc);
-
-            System.out.println("Armors in inventory:");
-            for (Armor a : inventory.getArmors()) {
-                System.out.println(a.getName());
+    /**
+     * Muestra los ítems en el inventario.
+     */
+    public void showInventory() {
+        if (items.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El inventario está vacío.");
+        } else {
+            StringBuilder inventoryList = new StringBuilder("Ítems en el inventario:\n");
+            for (Item item : items) {
+                inventoryList.append("- ").append(item.getName()).append("\n");
             }
-
-            System.out.println("Miscs in inventory:");
-            for (Misc m : inventory.getMiscs()) {
-                System.out.println(m.getName());
-            }
+            JOptionPane.showMessageDialog(null, inventoryList.toString());
         }
     }
 }
