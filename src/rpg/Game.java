@@ -131,5 +131,6 @@ public class Game {
                 JOptionPane.showMessageDialog(null, "Selección no válida.");
             }
         }
+
     }
 }
