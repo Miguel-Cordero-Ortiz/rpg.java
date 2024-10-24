@@ -1,12 +1,10 @@
 package rpg.gui.panels;
 
 import rpg.utils.ImageCache;
-
 import javax.swing.*;
 import java.awt.*;
 
 public abstract class BackgroundPanel extends JPanel {
-
     protected ImageIcon backgroundImage;
     protected Dimension dimension;
 
