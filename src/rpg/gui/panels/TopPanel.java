@@ -1,16 +1,19 @@
 package rpg.gui.panels;
-import rpg.gui.panels.BackgroundPanel;
-import rpg.gui.WindowConstants;
-import rpg.utils.ImageCache;
 
+import rpg.gui.MyWindowConstants;
+import rpg.utils.ImageCache;
 import javax.swing.*;
 
 public class TopPanel extends BackgroundPanel {
     @Override
     protected void init() {
-        backgroundImage = new ImageIcon(ImageCache.addImage("topPanel", "resources/Panel_juego1.png"));
-        setDimension(WindowConstants.TOP_DIMENSION);
-        setBorder(WindowConstants.EMPTY_BORDER);
-    }
+        // Cargamos la imagen desde el caché, usando el nombre único para TopPanel
+        backgroundImage = new ImageIcon(ImageCache.addImage("topPanel", "resources/Pared_ladrillos_1.png"));
 
+        // Ajustamos las dimensiones del panel con la constante establecida para TopPanel
+        setDimension(MyWindowConstants.TOP_DIMENSION); // Cambiar a MyWindowConstants
+
+        // Configuramos el borde (sin borde, en este caso, pero podrías ajustarlo según sea necesario)
+        setBorder(MyWindowConstants.EMPTY_BORDER); // Cambiar a MyWindowConstants
+    }
 }
